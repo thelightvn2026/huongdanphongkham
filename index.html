@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hướng dẫn sử dụng TL CLINIC</title>
+<meta name="description" content="Hướng dẫn sử dụng phần mềm quản lý phòng khám TL CLINIC theo từng vai trò: lễ tân, bác sĩ, cận lâm sàng, thu ngân, quản trị.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='7' y='7' width='26' height='26' rx='5' transform='rotate(45 20 20)' fill='none' stroke='%233f51b5' stroke-width='3.5'/%3E%3Cpath d='M14 13h12M20 13v13' stroke='%2343a047' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+:root{
+  --blue:#2f63ed; --blue-d:#234fc4; --blue-l:#e8effd; --brand:#3f51b5; --green:#43a047; --green-btn:#6aa84f;
+  --ink:#1f2a37; --ink2:#4b5563; --muted:#6b7280; --line:#e5e7eb; --bg:#f3f6fb; --white:#fff;
+  --yellow:#f6c344; --yellow-l:#fff8e1; --red:#d64545; --th:#e8f1fb;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:Roboto,Arial,sans-serif;font-size:14px;color:var(--ink);background:var(--bg);line-height:1.55}
+a{color:var(--blue);text-decoration:none}
+a:hover{text-decoration:underline}
+button{font-family:inherit}
+
+/* thanh trên cùng giống phần mềm */
+.top{position:sticky;top:0;z-index:20;height:52px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 16px}
+.brand{display:flex;align-items:center;gap:8px;color:var(--brand);font-weight:700;font-size:19px;letter-spacing:-.3px;white-space:nowrap;margin-right:10px}
+.brand:hover{text-decoration:none}
+.brand small{font-size:11px;font-weight:500;color:var(--muted);letter-spacing:0;margin-left:2px;margin-top:4px}
+.nav{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;flex:1}
+.nav::-webkit-scrollbar{display:none}
+.nav a{color:#444;font-size:12.5px;font-weight:600;text-transform:uppercase;padding:16px 9px 14px;white-space:nowrap;border-bottom:2px solid transparent}
+.nav a:hover{text-decoration:none;color:var(--blue)}
+.nav a.on{color:var(--blue);border-bottom-color:var(--blue)}
+.tsearch{position:relative;width:260px;flex-shrink:0}
+.tsearch input{width:100%;height:32px;border:1px solid #d1d5db;border-radius:4px;padding:0 10px 0 30px;font:inherit;font-size:13px;outline:none}
+.tsearch input:focus{border-color:var(--blue);box-shadow:0 0 0 2px var(--blue-l)}
+.tsearch svg{position:absolute;left:9px;top:9px}
+.results{position:absolute;top:36px;right:0;width:360px;max-height:70vh;overflow:auto;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 8px 24px rgba(15,23,42,.12);display:none}
+.results.show{display:block}
+.results a{display:block;padding:9px 12px;border-bottom:1px solid #f1f3f5;color:var(--ink)}
+.results a:hover,.results a.act{background:var(--blue-l);text-decoration:none}
+.results b{display:block;font-weight:600;font-size:13.5px}
+.results span{font-size:12px;color:var(--muted)}
+.results .none{padding:12px;color:var(--muted);font-size:13px}
+.menu-btn{display:none;border:0;background:none;padding:6px;cursor:pointer}
+
+/* bố cục hai cột như màn Khám bệnh */
+.wrap{display:flex;min-height:calc(100vh - 52px)}
+.side{width:260px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);padding:16px 12px;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.side h2{margin:0 4px 10px;font-size:16px;font-weight:600;color:var(--brand);display:flex;align-items:center;gap:6px}
+.side h2 .cnt{background:var(--blue);color:#fff;font-size:11px;border-radius:4px;padding:1px 6px}
+.side .item{display:flex;gap:10px;padding:9px 8px;border-bottom:1px solid #f1f3f5;border-radius:4px;color:var(--ink)}
+.side .item:hover{background:#f7f9fd;text-decoration:none}
+.side .item.on{background:var(--blue-l)}
+.side .num{color:var(--muted);font-size:12.5px;width:16px;flex-shrink:0;padding-top:1px}
+.side .t{display:block;font-weight:600;font-size:13.5px;color:#1e3a6e;line-height:1.35}
+.side .d{display:block;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.35}
+.side .grp{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:16px 6px 6px}
+.main{flex:1;min-width:0;padding:22px 28px 60px}
+.container{max-width:920px}
+
+/* thành phần chung */
+.crumb{font-size:12.5px;color:var(--muted);margin-bottom:6px}
+.crumb a{color:var(--muted)}
+h1{font-size:24px;line-height:1.3;margin:0 0 6px;font-weight:700;color:#14213d}
+.lead{color:var(--ink2);font-size:15px;margin:0 0 16px;max-width:760px}
+.card{background:#fff;border:1px solid var(--line);border-radius:6px;padding:18px 20px;margin-bottom:14px}
+.card h3{margin:0 0 8px;font-size:16px;font-weight:600;color:#14213d}
+.path{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:4px;padding:6px 10px;font-size:13px;margin:0 0 16px}
+.path b{font-weight:600;color:var(--brand)}
+.path .sep{color:#9ca3af}
+.badge{display:inline-block;font-size:11px;font-weight:600;border-radius:4px;padding:1px 6px;vertical-align:1px}
+.b-blue{background:var(--blue);color:#fff}
+.b-yellow{background:var(--yellow);color:#3d2c00}
+.b-green{background:var(--green);color:#fff}
+.b-grey{background:#e5e7eb;color:#374151}
+.btnlike{display:inline-block;background:var(--blue);color:#fff;border-radius:4px;padding:1px 8px;font-size:12.5px;font-weight:500;white-space:nowrap}
+.btnlike.green{background:var(--green-btn)}
+.btnlike.red{background:var(--red)}
+.btnlike.out{background:#fff;color:var(--blue);border:1px solid var(--blue)}
+kbd{font-family:inherit;font-size:12px;border:1px solid #cbd5e1;border-bottom-width:2px;border-radius:4px;padding:0 5px;background:#f8fafc}
+
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps>li{counter-increment:s;position:relative;padding:14px 18px 14px 58px;background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:10px}
+.steps>li::before{content:counter(s);position:absolute;left:16px;top:14px;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;font-weight:600;font-size:13.5px;display:flex;align-items:center;justify-content:center}
+.steps>li b.h{display:block;font-size:15px;font-weight:600;margin-bottom:2px;color:#14213d}
+.steps p{margin:4px 0}
+.steps ul{margin:6px 0 2px;padding-left:18px}
+.steps li li{margin:2px 0}
+
+.note{border-radius:6px;padding:11px 14px 11px 42px;margin:12px 0;position:relative;font-size:13.5px}
+.note::before{position:absolute;left:14px;top:11px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px}
+.note.warn{background:var(--yellow-l);border:1px solid #f3dc8f}
+.note.warn::before{content:"!";background:var(--yellow);color:#3d2c00}
+.note.info{background:var(--blue-l);border:1px solid #c9d8fb}
+.note.info::before{content:"i";background:var(--blue);color:#fff;font-style:italic;font-family:Georgia,serif}
+.note b{font-weight:600}
+
+.shot{border:1px solid #d6dbe4;border-radius:6px;background:#fff;margin:12px 0 6px;overflow:hidden;padding:0}
+.shot img{display:block;width:100%;height:auto;cursor:zoom-in}
+.shot figcaption{font-size:12.5px;color:var(--muted);padding:7px 12px;border-top:1px solid #eef1f5;background:#fafbfc}
+.nc{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#e53935;color:#fff;font-size:11.5px;font-weight:700;vertical-align:1px;flex-shrink:0}
+.lb{position:fixed;inset:0;background:rgba(15,23,42,.82);z-index:50;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.lb.show{display:flex}
+.lb img{max-width:100%;max-height:100%;border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.4);background:#fff}
+table.t{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:13.5px;margin:8px 0 14px}
+table.t th{background:var(--th);text-align:left;font-weight:600;padding:9px 12px;color:#1f2a37;border-bottom:1px solid #dbe5f3}
+table.t td{padding:9px 12px;border-top:1px solid #eef1f5;vertical-align:top}
+table.t td:first-child{white-space:nowrap}
+.check{list-style:none;padding:0;margin:8px 0}
+.check li{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px dashed #e5e7eb}
+.check input{margin-top:3px;width:16px;height:16px;accent-color:var(--blue)}
+
+/* trang chủ */
+.hero{background:#fff;border:1px solid var(--line);border-radius:6px;padding:24px 26px;display:flex;gap:24px;align-items:center;margin-bottom:16px}
+.hero h1{font-size:26px}
+.hero p{margin:6px 0 14px;color:var(--ink2);font-size:15px;max-width:600px}
+.hero .cta{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:4px;font-weight:500;font-size:13.5px;border:1px solid var(--blue);background:var(--blue);color:#fff}
+.btn:hover{background:var(--blue-d);text-decoration:none}
+.btn.out{background:#fff;color:var(--blue)}
+.btn.out:hover{background:var(--blue-l)}
+.sec-t{font-size:16px;font-weight:600;color:#14213d;margin:22px 0 10px}
+.roles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.role{background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px;color:var(--ink);display:flex;flex-direction:column;gap:6px;transition:border-color .15s,box-shadow .15s}
+.role:hover{border-color:var(--blue);box-shadow:0 2px 10px rgba(47,99,237,.12);text-decoration:none}
+.role .ic{width:36px;height:36px;border-radius:6px;background:var(--blue-l);display:flex;align-items:center;justify-content:center}
+.role b{font-size:15px;font-weight:600;color:#14213d}
+.role span{font-size:12.5px;color:var(--muted);line-height:1.4}
+.flow{display:flex;align-items:stretch;gap:0;background:#fff;border:1px solid var(--line);border-radius:6px;padding:14px;overflow-x:auto}
+.flow a{flex:1;min-width:104px;text-align:center;padding:10px 6px;border-radius:6px;color:var(--ink)}
+.flow a:hover{background:var(--blue-l);text-decoration:none}
+.flow .n{width:28px;height:28px;margin:0 auto 6px;border-radius:50%;background:var(--blue);color:#fff;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center}
+.flow b{display:block;font-size:13.5px;font-weight:600}
+.flow span{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;margin-top:2px}
+.flow .arr{display:flex;align-items:center;color:#9ca3af;padding-top:0;flex-shrink:0}
+.quick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.quick a{background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px;color:var(--ink)}
+.quick a:hover{border-color:var(--blue);text-decoration:none}
+.quick b{display:block;font-weight:600;font-size:14px;color:#1e3a6e}
+.quick span{font-size:12.5px;color:var(--muted)}
+.soon{background:#fff;border:1px dashed #cbd5e1;border-radius:6px;padding:18px 20px;color:var(--ink2)}
+.pager{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.pager a{flex:1;background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 14px;color:var(--ink)}
+.pager a:hover{border-color:var(--blue);text-decoration:none}
+.pager small{display:block;color:var(--muted);font-size:11.5px}
+.pager b{font-weight:600;font-size:13.5px;color:#1e3a6e}
+.pager .nx{text-align:right}
+.foot{margin-top:36px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+details.faq{background:#fff;border:1px solid var(--line);border-radius:6px;margin-bottom:8px}
+details.faq summary{cursor:pointer;padding:12px 16px;font-weight:600;font-size:14px;color:#14213d;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.faq summary::-webkit-details-marker{display:none}
+details.faq summary::after{content:"+";color:var(--blue);font-size:18px;line-height:1}
+details.faq[open] summary::after{content:"−"}
+details.faq .a{padding:0 16px 12px;color:var(--ink2)}
+details.faq .a p{margin:4px 0}
+
+@media (max-width:1000px){
+  .roles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .tsearch{width:200px}
+}
+@media (max-width:780px){
+  .menu-btn{display:block}
+  .brand small{display:none}
+  .brand{font-size:17px;margin-right:2px}
+  .nav{display:none}
+  .tsearch{width:auto;flex:1}
+  .results{width:calc(100vw - 32px);right:-8px}
+  .side{position:fixed;left:0;top:52px;z-index:15;transform:translateX(-100%);transition:transform .2s;box-shadow:4px 0 16px rgba(0,0,0,.08)}
+  body.side-open .side{transform:none}
+  .main{padding:16px 14px 50px}
+  .roles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quick{grid-template-columns:1fr}
+  .hero{padding:18px}
+  .hero h1{font-size:22px}
+  .hero .art{display:none}
+  .steps>li{padding:12px 14px 12px 50px}
+  .steps>li::before{left:12px}
+  table.t td:first-child{white-space:normal}
+}
+@media print{.top,.side,.pager{display:none}.main{padding:0}}
+</style>
+</head>
+<body>
+<header class="top">
+  <button class="menu-btn" id="menuBtn" aria-label="Mở danh sách bài"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <a class="brand" href="#/"><svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="7" width="26" height="26" rx="5" transform="rotate(45 20 20)" fill="none" stroke="#3f51b5" stroke-width="3.2"/><path d="M14 14h12M20 14v12" stroke="#43a047" stroke-width="3.2" stroke-linecap="round"/><path d="M14 19v8h8" stroke="#2f63ed" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>TL CLINIC<small>Hướng dẫn</small></a>
+  <nav class="nav" id="nav" aria-label="Vai trò"></nav>
+  <div class="tsearch">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="Tìm hướng dẫn, ví dụ: in đơn thuốc" aria-label="Tìm hướng dẫn" autocomplete="off">
+    <div class="results" id="results" role="listbox"></div>
+  </div>
+</header>
+<div class="lb" id="lb" role="dialog" aria-label="Ảnh phóng to"><img alt=""></div>
+<div class="wrap">
+  <aside class="side" id="side" aria-label="Danh sách bài"></aside>
+  <main class="main" id="main"><div class="container" id="view"></div></main>
+</div>
+
+<script>
+/* ===== Nội dung ===== */
+const IMG = (f, cap) => `<figure class="shot"><img src="img_${f}.jpg" alt="${cap}" loading="lazy"><figcaption>${cap}</figcaption></figure>`;
+const N = (n) => `<span class="nc">${n}</span>`;
+const PATH = (...p) => `<div class="path"><span>Menu:</span>${p.map((x,i)=>(i?'<span class="sep">›</span>':'')+'<b>'+x+'</b>').join('')}</div>`;
+const WARN = (h) => `<div class="note warn">${h}</div>`;
+const INFO = (h) => `<div class="note info">${h}</div>`;
+
+const ICON = {
+  'bat-dau':'<path d="M5 12l5 5L20 7"/>',
+  'le-tan':'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/>',
+  'bac-si':'<path d="M6 3v6a4 4 0 0 0 8 0V3"/><path d="M10 13v3a4 4 0 0 0 8 0v-2"/><circle cx="18" cy="12" r="2"/>',
+  'cls':'<path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3"/><path d="M7 15h10"/>',
+  'thu-ngan':'<rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 9v.01M18 15v.01"/>',
+  'quan-tri':'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.7 1.7 0 0 0 9 19.4a1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.7 1.7 0 0 0 4.6 9a1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  'hoi-dap':'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2.2-2.4 3.7M12 17h.01"/>'
+};
+const ic = (k, c='#2f63ed', s=20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
+
+const SECTIONS = [
+ {id:'bat-dau', name:'Bắt đầu', desc:'Một lượt khám đi qua những bước nào', articles:[
+  {id:'mot-luot-kham', title:'Một lượt khám từ A đến Z', sub:'Ai làm gì, theo thứ tự', body:`
+   <p class="lead">Một lượt khám đi qua 7 bước, mỗi bước do một vai trò phụ trách. Bấm tên bước để xem hướng dẫn chi tiết.</p>
+   <table class="t"><thead><tr><th>#</th><th>Bước</th><th>Người làm</th><th>Menu</th></tr></thead><tbody>
+    <tr><td>1</td><td><a href="#/le-tan/lich-hen">Đặt lịch hẹn</a></td><td>Lễ tân</td><td>Lịch hẹn</td></tr>
+    <tr><td>2</td><td><a href="#/le-tan/dang-ky-kham">Tiếp đón, nhập sinh hiệu</a></td><td>Lễ tân</td><td>Tiếp đón › Đăng ký khám</td></tr>
+    <tr><td>3</td><td><a href="#/bac-si/mo-luot-kham">Khám, chỉ định</a></td><td>Bác sĩ</td><td>Khám bệnh › Khám bệnh</td></tr>
+    <tr><td>4</td><td><a href="#/cls/nhap-ket-qua">Nhập kết quả cận lâm sàng</a></td><td>Kỹ thuật viên, BS CLS</td><td>Khám bệnh › Cận lâm sàng</td></tr>
+    <tr><td>5</td><td><a href="#/bac-si/ke-don">Chẩn đoán, kê đơn, hoàn thành khám</a></td><td>Bác sĩ</td><td>Khám bệnh › Khám bệnh</td></tr>
+    <tr><td>6</td><td><a href="#/thu-ngan/thu-tien">Thu tiền, in phiếu</a></td><td>Thu ngân</td><td>Thu ngân › Phát sinh dịch vụ</td></tr>
+    <tr><td>7</td><td><a href="#/bac-si/benh-an">Bệnh án điện tử</a></td><td>Bác sĩ</td><td>Bệnh nhân › Lịch sử khám › Bệnh án điện tử</td></tr>
+   </tbody></table>
+   ${INFO('Mỗi bệnh nhân có một hồ sơ thống nhất. Mỗi lần khám, tái khám là một lượt khám (mã PK…) riêng, không ghi đè lần trước.')}`}
+ ]},
+ {id:'thiet-lap', name:'Thiết lập danh mục', desc:'Khai báo danh mục ban đầu cho phòng khám mới', articles:[
+  {id:'tong-quan', title:'Tổng quan: 7 danh mục cần khai báo', sub:'Thứ tự làm và danh sách kiểm tra', body:`
+   ${PATH('Danh mục')}
+   <p class="lead">Phòng khám mới cần khai báo 7 danh mục trước khi khám bệnh nhân thật. Làm đúng thứ tự vì danh mục sau dùng dữ liệu của danh mục trước: dịch vụ cần phòng ban, nhân sự cần phòng ban, đơn mẫu cần thuốc. Người làm: tài khoản quản trị.</p>
+   ${IMG('menu_danhmuc','Menu Danh mục. Số đỏ là thứ tự khai báo')}
+   <table class="t"><thead><tr><th>Bước</th><th>Mục trong menu</th><th>Khai báo gì</th><th>Bài chi tiết</th></tr></thead><tbody>
+    <tr><td>${N(1)}</td><td>Thiết lập chung</td><td>Tên, địa chỉ, logo phòng khám; tài khoản hóa đơn điện tử; ngân hàng nhận chuyển khoản</td><td><a href="#/thiet-lap/thiet-lap-chung">Thiết lập chung</a></td></tr>
+    <tr><td>${N(2)}</td><td>Danh sách phòng ban</td><td>Phòng khám, cận lâm sàng, hành chính, thu ngân…</td><td><a href="#/thiet-lap/phong-ban">Phòng ban</a></td></tr>
+    <tr><td>${N(3)}</td><td>Danh mục nhân sự</td><td>Tài khoản đăng nhập, phân quyền, tài khoản liên thông của bác sĩ</td><td><a href="#/thiet-lap/nhan-su">Nhân sự</a></td></tr>
+    <tr><td>${N(4)}</td><td>Danh mục dịch vụ</td><td>Dịch vụ khám, xét nghiệm, chẩn đoán hình ảnh, thủ thuật; giá; mẫu kết quả</td><td><a href="#/thiet-lap/dich-vu">Dịch vụ</a></td></tr>
+    <tr><td>${N(5)}</td><td>Danh mục sản phẩm</td><td>Thuốc, vật tư: từ thư viện, thủ công hoặc nhập Excel</td><td><a href="#/thiet-lap/san-pham">Sản phẩm (thuốc)</a></td></tr>
+    <tr><td>${N(6)}</td><td>Danh mục đơn thuốc</td><td>Đơn thuốc mẫu cho bệnh hay gặp</td><td><a href="#/thiet-lap/don-mau">Đơn thuốc mẫu</a></td></tr>
+    <tr><td>${N(7)}</td><td>Danh mục mẫu in</td><td>Kiểm tra mẫu mặc định cho các phiếu</td><td><a href="#/thiet-lap/mau-in">Mẫu in</a></td></tr>
+   </tbody></table>
+   ${INFO('Xong 7 bước, làm thêm <a href="#/thiet-lap/chay-thu">Chạy thử một lượt khám</a> để kiểm tra logo, giá và phiếu in trước khi dùng thật.')}
+   <div class="card"><h3>Danh sách kiểm tra</h3><ul class="check">
+    <li><input type="checkbox" aria-label="Xong"><span>Thông tin phòng khám, logo, tài khoản ngân hàng</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Phòng ban</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Nhân sự, phân quyền, tài khoản liên thông của bác sĩ</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Dịch vụ, bảng giá, mẫu kết quả, mẫu in cho dịch vụ cận lâm sàng</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Thuốc và vật tư</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Đơn thuốc mẫu</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Mẫu in mặc định</span></li>
+    <li><input type="checkbox" aria-label="Xong"><span>Chạy thử một lượt khám</span></li>
+   </ul></div>`},
+
+  {id:'thiet-lap-chung', title:'Bước 1. Thiết lập chung', sub:'Thông tin phòng khám, hóa đơn điện tử, QR', body:`
+   ${PATH('Danh mục','Thiết lập chung')}
+   <p class="lead">Thông tin ở đây in lên mọi phiếu (đơn thuốc, phiếu khám, phiếu thanh toán…) và dùng để tạo mã QR chuyển khoản ở quầy thu ngân.</p>
+   ${IMG('thietlapchung','Hộp thoại Thiết lập chung. Các ô có thông tin tài khoản đã được che trong ảnh')}
+   <table class="t"><thead><tr><th>Số</th><th>Ô cần điền</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td>${N(1)}</td><td><b>Tên đơn vị</b>, <b>Địa chỉ</b>, <b>Số điện thoại</b></td><td>In ở đầu mọi phiếu. Ghi đúng tên trên giấy phép hoạt động.</td></tr>
+    <tr><td>${N(2)}</td><td><b>Key</b>, <b>Tài khoản</b>, <b>Mật khẩu</b></td><td>Tài khoản hóa đơn điện tử do nhà cung cấp hóa đơn cấp. Không dùng hóa đơn điện tử thì để trống.</td></tr>
+    <tr><td>${N(3)}</td><td><b>Url logo</b></td><td>Đường dẫn ảnh logo. Logo in ở góc trái phiếu. Chưa có đường dẫn: gửi file logo cho bộ phận hỗ trợ để được tải lên.</td></tr>
+    <tr><td>${N(4)}</td><td><b>Ngân hàng</b>, <b>Tài khoản thụ hưởng</b>, <b>Tên tài khoản thụ hưởng</b>, <b>Có TB QRcode</b></td><td>Tài khoản nhận tiền chuyển khoản. Tên tài khoản ghi in hoa, không dấu, đúng như ngân hàng. Tích <b>Có TB QRcode</b> nếu quầy thu ngân có thiết bị hiển thị mã QR (nút Hiển thị QR). Không có thiết bị thì mã QR vẫn in trên phiếu thanh toán chuyển khoản.</td></tr>
+    <tr><td>${N(5)}</td><td>Nút <span class="btnlike green">Lưu lại</span></td><td>Bấm để lưu. Bấm <b>Thoát</b> nếu chỉ xem.</td></tr>
+   </tbody></table>
+   ${WARN('Hộp thoại này có mật khẩu hóa đơn điện tử và số tài khoản ngân hàng. Chỉ quản trị được mở; không chụp màn hình gửi ra ngoài.')}
+   ${INFO('Sau khi lưu, in thử một phiếu thanh toán chuyển khoản và quét mã QR bằng ứng dụng ngân hàng để chắc chắn tên và số tài khoản đúng.')}`},
+
+  {id:'phong-ban', title:'Bước 2. Phòng ban', sub:'Khoa, phòng, nơi thực hiện dịch vụ', body:`
+   ${PATH('Danh mục','Danh sách phòng ban')}
+   <p class="lead">Phòng ban dùng ở hai nơi: <b>Khoa/Phòng</b> của từng dịch vụ và <b>Phòng ban</b> của từng nhân sự. Vì vậy phải tạo phòng ban trước dịch vụ và nhân sự.</p>
+   ${IMG('phongban_list','Danh mục phòng ban. Bấm (1) Thêm phòng ban')}
+   ${IMG('phongban_form','Hộp thoại Thêm mới phòng ban')}
+   <table class="t"><thead><tr><th>Số</th><th>Ô</th><th>Bắt buộc</th><th>Ghi chú</th></tr></thead><tbody>
+    <tr><td>${N(1)}</td><td>Mã phòng ban</td><td>Có</td><td>Viết tắt ngắn, không dấu, ví dụ <kbd>PK</kbd>, <kbd>CLS</kbd></td></tr>
+    <tr><td>${N(2)}</td><td>Tên phòng ban</td><td>Có</td><td>Tên hiện khi chọn phòng, ví dụ "Khám bệnh"</td></tr>
+    <tr><td>${N(3)}</td><td>Loại phòng ban</td><td>Có</td><td>Mặc định Phòng khám. Chọn Cận lâm sàng cho phòng xét nghiệm, siêu âm; Hành chính cho bộ phận văn phòng</td></tr>
+    <tr><td>${N(4)}</td><td>Trạng thái</td><td>Có</td><td>Để <b>Đang hoạt động</b></td></tr>
+    <tr><td>${N(5)}</td><td>Mô tả</td><td>Không</td><td>Chức năng của phòng</td></tr>
+    <tr><td>${N(6)}</td><td>Nút <span class="btnlike">Lưu phòng ban</span></td><td></td><td></td></tr>
+   </tbody></table>
+   <div class="card"><h3>Gợi ý cho phòng khám nhỏ</h3>
+   <table class="t" style="margin:0"><thead><tr><th>Mã</th><th>Tên</th><th>Loại</th></tr></thead><tbody>
+    <tr><td>PK</td><td>Khám bệnh</td><td>Phòng khám</td></tr>
+    <tr><td>CLS</td><td>Cận lâm sàng</td><td>Cận lâm sàng</td></tr>
+    <tr><td>HC</td><td>Hành chính</td><td>Hành chính</td></tr>
+    <tr><td>TT</td><td>Thu ngân</td><td>Hành chính</td></tr>
+   </tbody></table></div>`},
+
+  {id:'nhan-su', title:'Bước 3. Nhân sự và phân quyền', sub:'Tài khoản, quyền, liên thông đơn thuốc', body:`
+   ${PATH('Danh mục','Danh mục nhân sự')}
+   <p class="lead">Mỗi người dùng một tài khoản riêng. Số tài khoản được tạo theo gói phòng khám đang dùng.</p>
+   ${IMG('nhansu_list','Danh mục nhân sự: (1) Thêm mới, (2) cột Liên thông')}
+   <ol class="steps">
+    <li><b class="h">Bấm Thêm mới ${N(1)}</b><p>Chọn <b>Thêm bác sĩ</b> cho bác sĩ, hoặc <b>Thêm nhân sự khác</b> cho lễ tân, kỹ thuật viên, thu ngân, quản trị.</p></li>
+    <li><b class="h">Điền form theo số trên ảnh</b>${IMG('nhansu_form','Form thêm bác sĩ')}
+     <table class="t"><thead><tr><th>Số</th><th>Ô</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>${N(1)}</td><td>Mã nhân sự*, Họ và tên*, Số điện thoại*, Email, Ngày sinh, Giới tính, Chức danh*, Phòng ban*</td><td>Dấu * là bắt buộc. Phòng ban chọn từ danh sách đã tạo ở Bước 2.</td></tr>
+      <tr><td>${N(2)}</td><td>Số CCHN</td><td>Số chứng chỉ hành nghề của bác sĩ.</td></tr>
+      <tr><td>${N(3)}</td><td>Là Admin</td><td><b>Đang được tích sẵn.</b> Bỏ tích nếu người này không phải quản trị.</td></tr>
+      <tr><td>${N(4)}</td><td>Tên đăng nhập*, Mật khẩu*, Xác nhận mật khẩu*, Vai trò*</td><td>Người dùng đổi mật khẩu sau lần đăng nhập đầu.</td></tr>
+      <tr><td>${N(5)}</td><td>Phân quyền</td><td><b>Đang được tích sẵn tất cả.</b> Bỏ các quyền người này không cần (xem bảng gợi ý bên dưới).</td></tr>
+      <tr><td>${N(6)}</td><td>Tài khoản liên thông quốc gia</td><td>Bác sĩ kê đơn: bật <b>Sử dụng liên thông</b>, nhập Mã liên thông, Tài khoản, Mật khẩu liên thông Đơn thuốc quốc gia. Người không kê đơn: tắt.</td></tr>
+      <tr><td>${N(7)}</td><td>Nút <span class="btnlike">Lưu lại</span></td><td></td></tr>
+     </tbody></table></li>
+    <li><b class="h">Kiểm tra cột Liên thông ${N(2)}</b><p>Bác sĩ đã nhập tài khoản liên thông hiện <span class="badge b-blue">Đã cấu hình</span>; chưa nhập hiện <span class="badge b-yellow">Chưa cấu hình</span>.</p></li>
+   </ol>
+   <div class="card"><h3>Gợi ý phân quyền theo vai trò</h3>
+   <table class="t" style="margin:0"><thead><tr><th>Vai trò</th><th>Quyền nên tích</th></tr></thead><tbody>
+    <tr><td>Bác sĩ</td><td>Khám bệnh, Xem hồ sơ bệnh nhân, Chỉ định dịch vụ, Kê đơn</td></tr>
+    <tr><td>Lễ tân</td><td>Xem hồ sơ bệnh nhân (thêm Thu ngân nếu kiêm thu tiền)</td></tr>
+    <tr><td>Kỹ thuật viên, BS cận lâm sàng</td><td>Xem hồ sơ bệnh nhân, Khám bệnh</td></tr>
+    <tr><td>Thu ngân</td><td>Thu ngân, Xem hồ sơ bệnh nhân</td></tr>
+    <tr><td>Quản trị</td><td>Tất cả, kèm Là Admin</td></tr>
+   </tbody></table></div>
+   ${INFO('Sau khi tạo, đăng nhập thử bằng tài khoản mới để chắc chắn người đó thấy đúng các màn hình cần dùng.')}`},
+
+  {id:'dich-vu', title:'Bước 4. Dịch vụ, bảng giá, mẫu kết quả', sub:'4 loại dịch vụ', body:`
+   ${PATH('Danh mục','Danh mục dịch vụ')}
+   <p class="lead">Dịch vụ chia 4 loại: <b>Dịch vụ khám</b>, <b>Xét nghiệm</b>, <b>Chẩn đoán hình ảnh</b>, <b>Thủ thuật</b>. Giá khai báo ở đây tự điền khi đăng ký khám, chỉ định và thu tiền.</p>
+   ${IMG('dichvu_list','Danh mục dịch vụ: (1) Thêm mới và chọn loại dịch vụ')}
+   <ol class="steps">
+    <li><b class="h">Bấm Thêm mới ${N(1)}, chọn loại dịch vụ</b><p>Ví dụ siêu âm chọn <b>Chẩn đoán hình ảnh</b>, tổng phân tích nước tiểu chọn <b>Xét nghiệm</b>.</p></li>
+    <li><b class="h">Điền form theo số trên ảnh</b>${IMG('dichvu_form','Form dịch vụ Chẩn đoán hình ảnh')}
+     <table class="t"><thead><tr><th>Số</th><th>Ô</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>${N(1)}</td><td>Mã dịch vụ*, Tên dịch vụ*, Khoa/Phòng*, Đơn giá*</td><td>Mã được gợi ý sẵn, có thể giữ nguyên. Khoa/Phòng là nơi thực hiện (từ Bước 2).</td></tr>
+      <tr><td>${N(2)}</td><td>Thời gian (phút)</td><td>Thời gian thực hiện dự kiến.</td></tr>
+      <tr><td>${N(3)}</td><td>Mẫu in</td><td>Mẫu phiếu kết quả của dịch vụ, chọn <b>Phiếu kết quả CLS A4 (mẫu mới 17/11)</b>.</td></tr>
+      <tr><td>${N(4)}</td><td>Đang sử dụng</td><td>Tắt để ẩn dịch vụ không còn làm, không cần xóa.</td></tr>
+      <tr><td>${N(5)}</td><td>Mô tả kết quả*</td><td>Nội dung điền sẵn khi kỹ thuật viên nhập kết quả. Viết theo kết quả bình thường để chỉ phải sửa chỗ bất thường.</td></tr>
+      <tr><td>${N(6)}</td><td>Kết luận*</td><td>Kết luận mặc định, ví dụ "Hiện tại chưa phát hiện bất thường trên siêu âm ổ bụng."</td></tr>
+      <tr><td>${N(7)}</td><td>Nút <span class="btnlike">Mẫu mô tả kết quả</span></td><td>Chọn nhanh một mẫu mô tả có sẵn.</td></tr>
+      <tr><td>${N(8)}</td><td>Nút <span class="btnlike">Lưu</span></td><td></td></tr>
+     </tbody></table></li>
+   </ol>
+   ${WARN('Phiếu kết quả cận lâm sàng lấy mẫu in theo <b>từng dịch vụ</b> ở ô '+N(3)+'. Dịch vụ chưa chọn mẫu sẽ in theo mẫu cũ hoặc thiếu dữ liệu.')}
+   ${INFO('Mẫu mô tả đẹp, đúng chuyên môn cho siêu âm, xét nghiệm, X-quang, điện tim, nội soi: chép tại <a href="https://mauketqua.tlgo.vn" target="_blank" rel="noopener">mauketqua.tlgo.vn</a> rồi dán vào ô '+N(5)+'.')}`},
+
+  {id:'san-pham', title:'Bước 5. Sản phẩm (thuốc, vật tư)', sub:'Từ thư viện, thủ công, nhập Excel', body:`
+   ${PATH('Danh mục','Danh mục sản phẩm')}
+   <p class="lead">Thuốc trong danh mục là thuốc bác sĩ chọn được khi kê đơn. Có 3 cách thêm; nên dùng <b>thư viện</b> vì thuốc đã có sẵn số đăng ký, hoạt chất, hãng sản xuất.</p>
+   ${IMG('sanpham_list','Danh mục sản phẩm: (1) Thêm sản phẩm mới / Thêm sản phẩm từ thư viện, (2) Nhập Excel')}
+   <div class="card"><h3>Cách 1. Thêm từ thư viện (nên dùng)</h3>
+    <ol class="steps" style="margin-top:8px">
+     <li><b class="h">Bấm mũi tên cạnh Thêm sản phẩm mới ${N(1)}, chọn Thêm sản phẩm từ thư viện</b></li>
+     <li><b class="h">Tìm thuốc</b><p>Ở ô ${N(1)} trong ảnh dưới, lọc và gõ tên thuốc, hoạt chất hoặc số đăng ký rồi bấm <span class="btnlike green">Tìm kiếm</span>. Thư viện có hơn 54.000 thuốc.</p>${IMG('sanpham_thuvien','Thêm hàng hóa từ thư viện')}</li>
+     <li><b class="h">Bấm Thêm SP ${N(2)} ở dòng thuốc cần dùng</b><p>Thuốc được thêm vào danh mục của phòng khám. Thêm xong bấm <b>Thoát</b>.</p></li>
+    </ol></div>
+   <div class="card"><h3>Cách 2. Thêm thủ công</h3>
+    <p>Dùng cho thuốc không có trong thư viện hoặc vật tư. Bấm <span class="btnlike">Thêm sản phẩm mới</span>.</p>
+    ${IMG('sanpham_form','Hộp thoại Thêm mới hàng hóa')}
+    <table class="t"><thead><tr><th>Số</th><th>Ô</th><th>Ghi chú</th></tr></thead><tbody>
+     <tr><td>${N(1)}</td><td>Mã hàng hóa*</td><td>Tự sinh dạng SP000…, giữ nguyên.</td></tr>
+     <tr><td>${N(2)}</td><td>Tên hàng hóa*</td><td>Tên thuốc kèm hàm lượng, ví dụ "Paracetamol 500mg".</td></tr>
+     <tr><td>${N(3)}</td><td>ĐVT*</td><td>Đơn vị bán lẻ: viên, gói, lọ, tuýp…</td></tr>
+     <tr><td>${N(4)}</td><td>Số ĐK/GPNK</td><td>Số đăng ký hoặc giấy phép nhập khẩu. Cần cho đơn thuốc liên thông.</td></tr>
+     <tr><td>${N(5)}</td><td>Hàm lượng/Biệt dược (Hoạt chất)*</td><td>In trên đơn thuốc dưới tên thuốc.</td></tr>
+     <tr><td>${N(6)}</td><td>Nước SX, Quy cách, Hãng sản xuất, Nhà nhập khẩu, Hướng dẫn sử dụng</td><td>Không bắt buộc.</td></tr>
+     <tr><td>${N(7)}</td><td>Đang dùng</td><td>Bỏ tích để ẩn thuốc ngừng dùng.</td></tr>
+     <tr><td>${N(8)}</td><td>Các nút lưu</td><td><b>Lưu &amp; sao chép</b>: giữ thông tin để tạo thuốc tương tự (ví dụ khác hàm lượng). <b>Lưu và Thêm mới</b>: form trống để nhập tiếp. <b>Lưu và Đóng</b>: lưu rồi đóng.</td></tr>
+    </tbody></table></div>
+   <div class="card"><h3>Cách 3. Nhập Excel</h3>
+    <p>Có sẵn danh sách thuốc từ phần mềm cũ: bấm <span class="btnlike out">Nhập Excel</span>, hộp thoại <b>Thêm nhanh sản phẩm từ excel</b> mở ra.</p>
+    ${IMG('sanpham_excel','Hộp thoại Thêm nhanh sản phẩm từ excel')}
+    <ol style="margin:6px 0 0;padding-left:18px">
+     <li>${N(1)} Chọn nhóm sản phẩm (nếu có).</li>
+     <li>${N(2)} Bấm <span class="btnlike green">Tải mẫu</span> để tải file Excel mẫu, điền thuốc vào đúng cột: mã, tên, ĐVT, hàm lượng/hoạt chất, số đăng ký, nước sản xuất, quy cách, hãng sản xuất, nhà nhập khẩu, hướng dẫn sử dụng.</li>
+     <li>${N(3)} Bấm <span class="btnlike green">Import sản phẩm</span>, chọn file vừa điền.</li>
+     <li>${N(4)} Xem trước danh sách trong bảng, kiểm tra đúng cột.</li>
+     <li>${N(5)} Bấm <b>Lưu lại</b> để thêm vào danh mục.</li>
+    </ol></div>
+   ${INFO('<b>Phòng khám có nhà thuốc dùng TL GPP:</b> có thể dùng chung danh mục thuốc của nhà thuốc, không phải khai báo lại. Liên hệ bộ phận hỗ trợ để bật.')}`},
+
+  {id:'don-mau', title:'Bước 6. Đơn thuốc mẫu', sub:'Kê nhanh cho bệnh hay gặp', body:`
+   ${PATH('Danh mục','Danh mục đơn thuốc')}
+   <p class="lead">Đơn mẫu là bộ thuốc dựng sẵn cho bệnh hay gặp (cảm cúm, viêm họng…). Khi kê đơn, bác sĩ chọn đơn mẫu là các thuốc được đưa vào đơn, chỉ cần sửa lại nếu cần.</p>
+   <ol class="steps">
+    <li><b class="h">Bấm Thêm mới</b></li>
+    <li><b class="h">Điền form theo số trên ảnh</b>${IMG('donmau_form','Form đơn thuốc mẫu')}
+     <table class="t"><thead><tr><th>Số</th><th>Ô</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>${N(1)}</td><td>Tên đơn mẫu*, Ghi chú</td><td>Đặt tên theo bệnh để bác sĩ dễ tìm, ví dụ "Cảm cúm người lớn".</td></tr>
+      <tr><td>${N(2)}</td><td>Tìm kiếm sản phẩm, Số lượng, Cách dùng</td><td>Chỉ tìm được thuốc đã có trong danh mục sản phẩm (Bước 5).</td></tr>
+      <tr><td>${N(3)}</td><td>Nút <span class="btnlike green">Thêm</span></td><td>Đưa thuốc xuống bảng. Lặp lại cho từng thuốc.</td></tr>
+      <tr><td>${N(4)}</td><td>Bảng thuốc trong đơn mẫu</td><td>Bấm biểu tượng thùng rác để bỏ một thuốc.</td></tr>
+      <tr><td>${N(5)}</td><td>Nút <span class="btnlike">Lưu lại</span></td><td></td></tr>
+     </tbody></table></li>
+   </ol>
+   ${INFO('Bác sĩ dùng đơn mẫu ở ô <b>Đơn thuốc mẫu</b> trong tab Đơn thuốc. Xem bài <a href="#/bac-si/ke-don">Kê đơn thuốc</a>.')}`},
+
+  {id:'mau-in', title:'Bước 7. Mẫu in', sub:'Kiểm tra mẫu mặc định', body:`
+   ${PATH('Danh mục','Danh mục mẫu in')}
+   <p class="lead">Mỗi loại phiếu dùng mẫu được tích <b>Mặc định in</b>. Phòng khám mới đã có sẵn 5 mẫu mới, chỉ cần kiểm tra các mẫu này đang được tích.</p>
+   ${IMG('mauin_list','Danh sách mẫu in: (1) 5 mẫu mới đang là mặc định. Cột Ghi chú kỹ thuật được ẩn trong ảnh')}
+   <table class="t"><thead><tr><th>Phiếu</th><th>Khổ</th><th>Điểm chính</th></tr></thead><tbody>
+    <tr><td>Đơn thuốc</td><td>A5</td><td>Bảng thuốc gọn, mã QR tra cứu đơn</td></tr>
+    <tr><td>Phiếu thanh toán</td><td>A5</td><td>Khối QR chỉ in khi chuyển khoản</td></tr>
+    <tr><td>Phiếu khám bệnh</td><td>A4</td><td>Sinh hiệu, khám lâm sàng, chỉ định, chẩn đoán, đơn thuốc</td></tr>
+    <tr><td>Kết quả cận lâm sàng</td><td>A4</td><td>Ảnh căn giữa, khung kết luận; chọn theo từng dịch vụ (Bước 4)</td></tr>
+    <tr><td>Bệnh án ngoại trú</td><td>A4</td><td>Các mục A đến I, tự sang trang khi dài</td></tr>
+   </tbody></table>
+   ${WARN('Không bấm <span class="btnlike green">Sửa</span> rồi <span class="btnlike">Lưu lại</span> trong ô soạn thảo: ô soạn thảo tự chèn khung làm lệch lề, in thừa trang, có thể làm mất dữ liệu. Cần chỉnh mẫu, liên hệ bộ phận hỗ trợ.')}`},
+
+  {id:'chay-thu', title:'Chạy thử một lượt khám', sub:'Kiểm tra trước khi dùng thật', body:`
+   <p class="lead">Tạo một bệnh nhân thử có tên bắt đầu bằng <kbd>TEST_</kbd> và đi hết một lượt khám. Mỗi bước in phiếu ra để kiểm tra.</p>
+   <ol class="steps">
+    <li><b class="h">Thêm bệnh nhân TEST_ và đăng ký khám</b><p>Kiểm tra giá dịch vụ khám tự điền đúng. <a href="#/le-tan/dang-ky-kham">Xem bài</a></p></li>
+    <li><b class="h">Bác sĩ khám, chỉ định một dịch vụ cận lâm sàng</b><p>Kiểm tra dịch vụ hiện ở danh sách Chờ kết quả. <a href="#/bac-si/chi-dinh">Xem bài</a></p></li>
+    <li><b class="h">Nhập kết quả, in phiếu kết quả</b><p>Mẫu mô tả điền sẵn; phiếu in đúng mẫu, có logo. <a href="#/cls/nhap-ket-qua">Xem bài</a></p></li>
+    <li><b class="h">Chẩn đoán, kê đơn từ đơn mẫu, in đơn thuốc và phiếu khám</b><p><a href="#/bac-si/ke-don">Xem bài</a></p></li>
+    <li><b class="h">Thu tiền bằng chuyển khoản, in phiếu thanh toán</b><p>Quét mã QR bằng ứng dụng ngân hàng để kiểm tra tên, số tài khoản (không cần chuyển tiền). <a href="#/thu-ngan/thu-tien">Xem bài</a></p></li>
+    <li><b class="h">Hoàn thành khám, in bệnh án</b><p><a href="#/bac-si/hoan-thanh">Xem bài</a></p></li>
+   </ol>
+   ${WARN('Bệnh nhân thử: không bật gửi liên thông Đơn thuốc quốc gia và không xuất hóa đơn điện tử.')}`}
+ ]},
+ {id:'le-tan', name:'Lễ tân', desc:'Bệnh nhân, lịch hẹn, tiếp đón, sinh hiệu', articles:[
+  {id:'benh-nhan', title:'Tìm và thêm bệnh nhân', sub:'Quản lý bệnh nhân', body:`
+   ${PATH('Bệnh nhân','Quản lý bệnh nhân')}
+   <p class="lead">Mỗi bệnh nhân có một hồ sơ duy nhất với mã KH…. Tìm trước khi thêm để không tạo hồ sơ trùng.</p>
+   <ol class="steps">
+    <li><b class="h">Tìm bệnh nhân</b><p>Gõ tên, số điện thoại hoặc mã bệnh nhân vào ô Tìm kiếm, có thể lọc theo giới tính, rồi bấm <span class="btnlike">Tìm kiếm</span>.</p>${IMG('benhnhan_list','Bệnh nhân › Quản lý bệnh nhân')}</li>
+    <li><b class="h">Bấm Thêm bệnh nhân, điền 3 khối thông tin</b>${IMG('benhnhan_form','Hộp thoại Thêm mới bệnh nhân')}<ul><li><b>Thông tin bệnh nhân:</b> Mã BN tự sinh (KH…). <b>Tên bệnh nhân</b>, <b>Ngày sinh</b>, <b>SĐT</b> là bắt buộc. Giới tính, Địa chỉ (gõ trực tiếp), Mã định danh công dân, Mã BHYT, Nghề nghiệp, Dân tộc.</li><li><b>Thông tin y tế:</b> cân nặng, chiều cao, nhóm máu, <b>Tiền sử bệnh</b>, <b>Dị ứng</b>. Dị ứng hiện nổi bật cho bác sĩ khi khám.</li><li><b>Người liên hệ:</b> họ tên giám hộ, quan hệ với bệnh nhân, số điện thoại (bắt buộc ghi với trẻ em), ghi chú.</li></ul></li>
+    <li><b class="h">Lưu</b><p><span class="btnlike">Lưu &amp; đóng</span> để lưu và đóng; <span class="btnlike">Lưu &amp; thêm mới</span> để nhập tiếp bệnh nhân khác.</p></li>
+   </ol>
+   <div class="card"><h3>Các nút trên mỗi dòng bệnh nhân</h3>
+   <table class="t" style="margin:0"><thead><tr><th>Nút</th><th>Dùng để</th></tr></thead><tbody>
+    <tr><td><span class="btnlike out">Xem bệnh án</span></td><td>Xem lịch sử các lần khám, mở bệnh án điện tử</td></tr>
+    <tr><td><span class="btnlike out">Đăng ký khám</span></td><td>Tạo lượt khám mới cho bệnh nhân này</td></tr>
+    <tr><td><span class="btnlike green">Sửa</span></td><td>Sửa thông tin hồ sơ</td></tr>
+   </tbody></table></div>
+   ${WARN('Không xóa hồ sơ bệnh nhân đã có lượt khám. Không sửa mã bệnh nhân.')}`},
+  {id:'lich-hen', title:'Đặt lịch hẹn', sub:'Thêm, xác nhận, in lịch hẹn', body:`
+   ${PATH('Lịch hẹn')}
+   <p class="lead">Ghi lịch hẹn theo bác sĩ và dịch vụ khám. Khi bệnh nhân đến, đăng ký khám thẳng từ lịch hẹn.</p>
+   <ol class="steps">
+    <li><b class="h">Bấm Thêm lịch hẹn</b>${IMG('lichhen_form','Form thêm lịch hẹn')}</li>
+    <li><b class="h">Chọn bệnh nhân</b><p>Gõ tên, số điện thoại, CCCD hoặc mã bệnh nhân. Bệnh nhân mới: bấm <span class="btnlike out">+ Thêm mới khách hàng</span>.</p></li>
+    <li><b class="h">Điền thông tin hẹn</b><ul><li><b>Ngày hẹn</b>, <b>Giờ hẹn</b>, <b>Dịch vụ khám</b>, <b>Bác sĩ</b>: bắt buộc</li><li>Lý do khám, Ghi chú: không bắt buộc</li></ul></li>
+    <li><b class="h">Bấm Lưu</b><p>Lịch hiện trong tab <b>Lịch hẹn</b>. Lọc theo ngày, bác sĩ, trạng thái; bấm <span class="btnlike out">In lịch hẹn</span> để in danh sách.</p></li>
+    <li><b class="h">Khi bệnh nhân đến</b><p>Ở dòng lịch hẹn, xác nhận rồi bấm đăng ký khám: thông tin bệnh nhân và dịch vụ được điền sẵn sang màn Đăng ký khám.</p></li>
+   </ol>`},
+  {id:'tai-kham', title:'Danh sách hẹn tái khám', sub:'Bệnh nhân bác sĩ hẹn quay lại', body:`
+   ${PATH('Lịch hẹn','tab Hẹn tái khám')}
+   <p class="lead">Khi bác sĩ hẹn tái khám ở tab Chẩn đoán, bệnh nhân tự vào danh sách này với ngày tái khám đã tính sẵn.</p>
+   <ol class="steps">
+    <li><b class="h">Mở tab Hẹn tái khám</b><p>Lọc theo ngày để xem ai cần quay lại hôm nay hoặc tuần này.</p></li>
+    <li><b class="h">Nhắc bệnh nhân</b><p>Dùng số điện thoại trong danh sách để gọi hoặc nhắn nhắc lịch.</p></li>
+    <li><b class="h">Đăng ký khám khi bệnh nhân đến</b><p>Lượt tái khám là một lượt khám mới, liên kết với lần trước, không ghi đè.</p></li>
+   </ol>`},
+  {id:'dang-ky-kham', title:'Đăng ký khám và nhập sinh hiệu', sub:'Tiếp đón, tạo lượt khám', body:`
+   ${PATH('Tiếp đón','Đăng ký khám')}
+   <p class="lead">Tạo lượt khám (mã PK…) và đưa bệnh nhân vào hàng chờ của bác sĩ. Nhập luôn chỉ số sinh tồn để bác sĩ đỡ phải đo lại.</p>
+   <ol class="steps">
+    <li><b class="h">Chọn bệnh nhân</b><p>Ô <b>Tìm bệnh nhân</b>: gõ tên, số điện thoại, CCCD hoặc mã bệnh nhân. Chưa có hồ sơ: bấm <span class="btnlike out">+ Thêm bệnh nhân mới</span>.</p>${IMG('dangkykham','Tiếp đón › Đăng ký khám')}</li>
+    <li><b class="h">Thông tin khám</b><ul><li><b>Dịch vụ khám</b> (bắt buộc): đơn giá tự điền.</li><li><b>Bác sĩ</b> (bắt buộc): khoa/phòng tự điền theo bác sĩ.</li><li><b>Ngày khám</b>, giờ tiếp đón: mặc định hiện tại.</li><li>Lý do khám.</li></ul><p>Góc phải hiện <b>Tổng tiền dự kiến</b> để báo bệnh nhân.</p></li>
+    <li><b class="h">Chỉ số sinh tồn</b><p>Mạch (lần/phút), nhiệt độ (°C), huyết áp (mmHg), nhịp thở (lần/phút), cân nặng (kg), chiều cao (cm), SpO2.</p></li>
+    <li><b class="h">Bấm Lưu và tạo lượt khám</b><p>Bệnh nhân hiện ngay trong danh sách <b>Bệnh nhân chờ</b> của bác sĩ đã chọn.</p></li>
+   </ol>
+   ${WARN('Chỉ bấm <span class="btnlike">Lưu và tạo lượt khám</span> một lần, tránh tạo trùng lượt khám.')}`}
+ ]},
+ {id:'bac-si', name:'Bác sĩ', desc:'Khám, chỉ định, chẩn đoán, kê đơn', articles:[
+  {id:'mo-luot-kham', title:'Hàng chờ và mở lượt khám', sub:'Danh sách Bệnh nhân chờ', body:`
+   ${PATH('Khám bệnh','Khám bệnh')}
+   <p class="lead">Bác sĩ chỉ thấy bệnh nhân chờ của mình. Chọn bệnh nhân trong danh sách bên trái để mở lượt khám.</p>
+   <ol class="steps">
+    <li><b class="h">Xem danh sách Bệnh nhân chờ</b><p>Cột bên trái hiện tên, tuổi, giới tính, giờ đăng ký và dịch vụ khám. Thẻ <span class="badge b-blue">Chờ khám</span> là trạng thái; thẻ <span class="badge b-yellow">Kết quả 0/1</span> cho biết số chỉ định cận lâm sàng đã có kết quả.</p><p>Bấm nút làm mới cạnh tiêu đề để cập nhật danh sách. Ô tìm kiếm tìm theo tên, số điện thoại hoặc mã bệnh nhân.</p>${IMG('hangcho','Khám bệnh: danh sách Bệnh nhân chờ bên trái')}</li>
+    <li><b class="h">Chọn bệnh nhân</b><p>Bấm vào tên bệnh nhân. Màn hình bên phải mở lượt khám với 5 tab: <b>Thông tin chung</b>, <b>Chỉ định</b>, <b>Chẩn đoán</b>, <b>Đơn thuốc</b>, <b>Thanh toán</b>.</p></li>
+    <li><b class="h">Kiểm tra dị ứng và tiền sử</b><p>Dị ứng của bệnh nhân hiện nổi bật ngay khi mở lượt khám. Đọc trước khi chỉ định và kê đơn.</p></li>
+   </ol>
+   ${INFO('Bác sĩ cũng có thể tự đăng ký khám cho bệnh nhân bằng nút <span class="btnlike">+ Đăng ký khám</span> ở cuối danh sách chờ.')}`},
+  {id:'thong-tin-chung', title:'Thông tin chung: hỏi bệnh, khám lâm sàng', sub:'Tab Thông tin chung', body:`
+   ${PATH('Khám bệnh','Khám bệnh','tab Thông tin chung')}
+   <p class="lead">Ghi lý do khám, bệnh sử và kết quả khám lâm sàng. Các nội dung này in lên phiếu khám và bệnh án.</p>
+   <ol class="steps">
+    <li><b class="h">Xem thông tin hành chính và sinh hiệu</b><p>Thông tin bệnh nhân và chỉ số sinh tồn do lễ tân nhập lúc tiếp đón hiện sẵn.</p></li>
+    <li><b class="h">Nhập Lý do khám và Triệu chứng</b><p><b>Triệu chứng</b> bắt buộc phải có trước khi hoàn thành khám.</p></li>
+    <li><b class="h">Nhập khám lâm sàng</b><p>Có thể gõ nhiều dòng, ví dụ mỗi cơ quan một dòng. Phiếu in xuống dòng đúng như lúc nhập.</p>${IMG('kham_thongtin','Tab Thông tin chung')}</li>
+    <li><b class="h">Lưu</b><p>Lưu trước khi chuyển sang tab khác.</p></li>
+   </ol>`},
+  {id:'chi-dinh', title:'Chỉ định cận lâm sàng', sub:'Tab Chỉ định', body:`
+   ${PATH('Khám bệnh','Khám bệnh','tab Chỉ định')}
+   <p class="lead">Chỉ định xét nghiệm, chẩn đoán hình ảnh, thủ thuật. Dịch vụ được chuyển ngay sang danh sách chờ của phòng thực hiện.</p>
+   <ol class="steps">
+    <li><b class="h">Chọn dịch vụ</b><p>Tìm và chọn dịch vụ theo tên. Đơn giá tự điền theo bảng giá.</p></li>
+    <li><b class="h">Lưu chỉ định</b><p>Mỗi dòng hiện tình trạng: chờ thực hiện, đang thực hiện hoặc đã có kết quả.</p>${IMG('kham_chidinh','Tab Chỉ định')}</li>
+    <li><b class="h">Xem kết quả</b><p>Khi kỹ thuật viên nhập xong, nút <span class="btnlike out">Xem kết quả</span> hiện ở cuối dòng và thẻ Kết quả ở danh sách chờ tăng lên.</p></li>
+   </ol>
+   ${WARN('Chỉ định đã có kết quả hoặc đã thanh toán thì không xóa được.')}`},
+  {id:'chan-doan', title:'Chẩn đoán, lời dặn, hẹn tái khám', sub:'Tab Chẩn đoán', body:`
+   ${PATH('Khám bệnh','Khám bệnh','tab Chẩn đoán')}
+   <p class="lead">Ghi chẩn đoán theo mã ICD-10, hướng xử trí, lời dặn và hẹn tái khám.</p>
+   <ol class="steps">
+    <li><b class="h">Chọn chẩn đoán chính</b><p>Gõ mã hoặc tên bệnh vào ô ${N(1)}, ví dụ <kbd>J00</kbd> hoặc "viêm họng". Danh sách gợi ý ${N(2)} hiện mã ICD-10, tên chẩn đoán và mô tả; bấm để chọn. Chẩn đoán đầu tiên được đánh dấu <b>Chẩn đoán chính</b>.</p>${IMG('kham_icd','Gõ mã ICD-10 và chọn trong danh sách gợi ý')}</li>
+    <li><b class="h">Thêm chẩn đoán kèm theo</b><p>Nếu có, thêm một hoặc nhiều chẩn đoán kèm theo.</p></li>
+    <li><b class="h">Nhập hướng xử trí và lời dặn</b><p>Lời dặn in lên đơn thuốc và phiếu khám, giữ nguyên xuống dòng.</p></li>
+    <li><b class="h">Hẹn tái khám</b><p>Nhập số ngày (hoặc tuần, tháng). Ngày tái khám tự tính và bệnh nhân hiện trong danh sách Hẹn tái khám của lễ tân.</p>${IMG('kham_chandoan','Tab Chẩn đoán: mã ICD-10, hướng xử trí, hẹn tái khám, lời dặn')}</li>
+   </ol>
+   ${WARN('Phải có ít nhất một chẩn đoán thì mới hoàn thành khám được.')}
+   ${INFO('Lần đầu mở màn hình, danh mục ICD cần vài giây để tải. Nếu gõ mã chưa ra gợi ý, chờ một chút rồi gõ lại.')}`},
+  {id:'ke-don', title:'Kê đơn thuốc', sub:'Tab Đơn thuốc, đơn mẫu', body:`
+   ${PATH('Khám bệnh','Khám bệnh','tab Đơn thuốc')}
+   <p class="lead">Kê thuốc từ danh mục hoặc từ đơn mẫu. Đơn thuốc mang mã đơn theo chuẩn liên thông Đơn thuốc quốc gia.</p>
+   <ol class="steps">
+    <li><b class="h">Chọn thuốc</b><p>Gõ tên thuốc và chọn trong danh sách. Tên, hàm lượng và đơn vị tính tự hiện.</p></li>
+    <li><b class="h">Nhập số lượng và cách dùng</b><p>Ví dụ: số lượng <kbd>14</kbd>, cách dùng "Ngày uống 2 lần, mỗi lần 1 viên trước ăn 30 phút".</p></li>
+    <li><b class="h">Thêm thuốc vào đơn</b><p>Đặt con trỏ ở ô Cách dùng và bấm <kbd>Enter</kbd> để thêm dòng thuốc. Lặp lại cho từng thuốc.</p>${IMG('kham_donthuoc','Tab Đơn thuốc')}</li>
+    <li><b class="h">Hoặc dùng đơn mẫu</b><p>Chọn ở ô <b>Đơn thuốc mẫu</b> dưới bảng thuốc, các thuốc trong mẫu được đưa vào đơn. Sửa lại số lượng, cách dùng nếu cần.</p></li>
+    <li><b class="h">Lời dặn, hẹn tái khám</b><p>Ô <b>Lời dặn</b> và <b>Hẹn tái khám sau</b> ở cuối tab dùng chung với tab Chẩn đoán, nhập ở đâu cũng được.</p></li>
+    <li><b class="h">Lưu đơn và in</b><p>Bấm <span class="btnlike">Lưu</span>, rồi <span class="btnlike out">In đơn thuốc</span> ở góc trên để in đơn khổ A5, có mã QR tra cứu.</p></li>
+   </ol>
+   ${WARN('Nút bên phải ô Cách dùng là <b>Thêm sản phẩm</b> (thêm thuốc mới vào danh mục), không phải nút thêm thuốc vào đơn. Thêm thuốc vào đơn bằng phím <kbd>Enter</kbd>.')}`},
+  {id:'hoan-thanh', title:'In phiếu và hoàn thành khám', sub:'Kết thúc lượt khám', body:`
+   ${PATH('Khám bệnh','Khám bệnh')}
+   <p class="lead">Sau khi có chẩn đoán và đơn thuốc, in phiếu cho bệnh nhân rồi bấm Hoàn thành khám để đóng lượt khám.</p>
+   ${WARN('Phải nhập <b>Triệu chứng</b> (tab Thông tin chung) và ít nhất một <b>Chẩn đoán</b> (tab Chẩn đoán) thì mới hoàn thành khám được.')}
+   <ol class="steps">
+    <li><b class="h">In phiếu khám, đơn thuốc</b><p>Bấm <span class="btnlike out">In phiếu khám</span> (A4) và <span class="btnlike out">In đơn thuốc</span> (A5) ở góc trên.</p></li>
+    <li><b class="h">Bấm Hoàn thành khám ở góc trên bên trái</b></li>
+    <li><b class="h">Xác nhận theo số trên ảnh</b>${IMG('hoanthanh_hopthoai','Hộp thoại Hoàn thành khám')}
+     <table class="t"><thead><tr><th>Số</th><th>Việc làm</th></tr></thead><tbody>
+      <tr><td>${N(1)}</td><td>Nhập <b>Tình trạng khi kết thúc khám</b>. Mặc định "Ổn định, điều trị ngoại trú!", sửa nếu cần. Nội dung này in vào bệnh án.</td></tr>
+      <tr><td>${N(2)}</td><td>Bấm <span class="btnlike green">Hoàn thành khám</span>.</td></tr>
+      <tr><td>${N(3)}</td><td>Hộp nhỏ "Bạn muốn hoàn thành khám?" hiện ra: bấm <b>Yes</b>. Không bấm Yes thì lượt khám chưa hoàn thành.</td></tr>
+     </tbody></table></li>
+    <li><b class="h">Kiểm tra</b><p>Bệnh nhân biến mất khỏi danh sách <b>Bệnh nhân chờ</b>, trạng thái trong Lịch sử khám chuyển sang <span class="badge b-green">Hoàn thành</span>.</p></li>
+   </ol>
+   <div class="card"><h3>Báo lỗi khi bấm Yes</h3>
+    ${IMG('hoanthanh_loi','Thông báo lỗi khi thiếu Triệu chứng hoặc Chẩn đoán')}
+    <p>"Triệu chứng chưa được nhập": bấm <b>Thoát</b>, vào tab Thông tin chung nhập Triệu chứng, bấm <span class="btnlike">Lưu</span>. "Chẩn đoán chưa được nhập": vào tab Chẩn đoán chọn mã ICD-10, bấm Lưu. Rồi bấm Hoàn thành khám lại.</p></div>
+   ${INFO('<b>Có kết nối phần mềm nhà thuốc TL GPP:</b> khi bác sĩ hoàn thành khám, đơn thuốc được đẩy sang phần mềm nhà thuốc để dược sĩ bán ngay, không phải nhập lại. Chưa hoàn thành khám thì nhà thuốc chưa nhận được đơn.')}`},
+  {id:'benh-an', title:'Bệnh án điện tử', sub:'Xem, xác nhận, in bệnh án', body:`
+   ${PATH('Bệnh nhân','Xem bệnh án','Bệnh án điện tử')}
+   <p class="lead">Bệnh án ngoại trú được tổng hợp tự động từ lượt khám: hành chính, hỏi bệnh, chỉ định và kết quả, chẩn đoán, đơn thuốc, tài liệu, chi phí.</p>
+   <ol class="steps">
+    <li><b class="h">Mở lịch sử khám của bệnh nhân</b><p>Ở <b>Bệnh nhân</b>, bấm <span class="btnlike out">Xem bệnh án</span> ở dòng bệnh nhân. Bảng liệt kê các lần khám, chẩn đoán, tiền khám, trạng thái. Dị ứng, tiền sử hiện đỏ ở góc phải ${N(2)}.</p>${IMG('lichsukham','Lịch sử khám của bệnh nhân')}</li>
+    <li><b class="h">Bấm Bệnh án điện tử ${N(1)} ở lần khám cần xem</b><p>Bệnh án mở trong tab mới.</p>${IMG('benhan','Bệnh án điện tử')}</li>
+    <li><b class="h">Xem từng mục ${N(1)}</b><p>Cột trái có 8 mục, dấu tích xanh là mục đã có dữ liệu: Hành chính, Hỏi bệnh &amp; khám bệnh, Chỉ định &amp; kết quả, Chẩn đoán &amp; điều trị, Đơn thuốc, Tài liệu đính kèm, Chi phí, Lịch sử &amp; xác nhận.</p></li>
+    <li><b class="h">Bấm In bệnh án ${N(2)}</b><p>In bệnh án ngoại trú khổ A4.</p></li>
+    <li><b class="h">Bấm Hoàn thành &amp; xác nhận ${N(3)}</b><p>Bác sĩ xác nhận để khóa hồ sơ ở chế độ chỉ đọc. Mọi thao tác được ghi ở mục Lịch sử &amp; xác nhận.</p></li>
+   </ol>`},
+ ]},
+ {id:'cls', name:'Cận lâm sàng', desc:'Nhập kết quả, đính kèm ảnh, in kết quả', articles:[
+  {id:'nhap-ket-qua', title:'Nhập kết quả cận lâm sàng', sub:'Chờ kết quả, mẫu điền sẵn', body:`
+   ${PATH('Khám bệnh','Cận lâm sàng')}
+   <p class="lead">Dịch vụ bác sĩ chỉ định hiện trong danh sách <b>Chờ kết quả</b>. Ô mô tả đã điền sẵn mẫu kết quả của dịch vụ, chỉ cần sửa chỗ bất thường.</p>
+   <ol class="steps">
+    <li><b class="h">Chọn dịch vụ cần làm</b><p>Cột trái có 2 nút: <span class="btnlike">Chờ kết quả</span> và <span class="btnlike out">Đã nhập</span>. Mỗi dòng ghi tên bệnh nhân, tên dịch vụ, giờ chỉ định. Tìm theo tên, số điện thoại, mã bệnh nhân.</p>${IMG('cls_ketqua','Nhập kết quả cận lâm sàng: danh sách bên trái, nội dung kết quả và hình ảnh bên phải')}</li>
+    <li><b class="h">Kiểm tra thông tin</b><p>Phía trên hiện bệnh nhân, dịch vụ, bác sĩ chỉ định, ngày chỉ định và ghi chú chỉ định.</p></li>
+    <li><b class="h">Sửa Mô tả kết quả</b><p>Mẫu của dịch vụ đã có sẵn trong ô. Sửa các dòng có bất thường, ví dụ thêm kích thước, vị trí tổn thương.</p></li>
+    <li><b class="h">Ghi Kết luận và Ghi chú</b><p>Mô tả kết quả và Kết luận là bắt buộc. Kết luận in trong khung riêng trên phiếu.</p></li>
+    <li><b class="h">Bấm Lưu kết quả</b><p>Dịch vụ chuyển sang danh sách Đã nhập và bác sĩ thấy kết quả ngay trong tab Chỉ định.</p></li>
+   </ol>
+   ${INFO('Muốn mẫu kết quả đẹp và đúng chuyên môn hơn: chép mẫu từ <a href="https://mauketqua.tlgo.vn" target="_blank" rel="noopener">mauketqua.tlgo.vn</a> vào dịch vụ ở Danh mục › Danh mục dịch vụ.')}`},
+  {id:'dinh-kem-anh', title:'Đính kèm ảnh kết quả', sub:'Siêu âm, nội soi, X-quang', body:`
+   ${PATH('Khám bệnh','Cận lâm sàng','Hình ảnh kết quả')}
+   <p class="lead">Đính kèm ảnh siêu âm, nội soi… để in kèm phiếu kết quả.</p>
+   <ol class="steps">
+    <li><b class="h">Bấm Chọn ảnh</b><p>Ở khung <b>Hình ảnh kết quả</b> bên phải. Nhận ảnh PNG, JPG, JPEG, tối đa 10 MB mỗi ảnh.</p>${IMG('cls_ketqua','Khung Hình ảnh kết quả ở bên phải, ảnh đã chọn có dấu × đỏ để bỏ')}</li>
+    <li><b class="h">Chọn ảnh trên máy</b><p>Ảnh hiện dạng ô nhỏ. Bấm dấu × đỏ trên ảnh để bỏ ảnh chọn nhầm.</p></li>
+    <li><b class="h">Bấm Lưu kết quả</b></li>
+   </ol>
+   ${INFO('Phiếu kết quả in tối đa 3 ảnh một hàng, căn giữa trang, dưới mục II. HÌNH ẢNH. Không có ảnh thì mục này tự ẩn.')}`},
+  {id:'in-ket-qua', title:'In phiếu kết quả', sub:'Phiếu A4 theo mẫu của dịch vụ', body:`
+   ${PATH('Khám bệnh','Cận lâm sàng','Đã nhập')}
+   <ol class="steps">
+    <li><b class="h">Mở danh sách Đã nhập, chọn dịch vụ</b></li>
+    <li><b class="h">Bấm In kết quả</b><p>Phiếu A4 gồm thông tin bệnh nhân, hình ảnh (nếu có), mô tả kết quả, khung kết luận và chữ ký người thực hiện.</p></li>
+   </ol>
+   ${WARN('Phiếu kết quả lấy mẫu in theo <b>từng dịch vụ</b>. In ra sai mẫu: vào Danh mục › Danh mục dịch vụ, sửa dịch vụ, chọn đúng mẫu ở ô <b>Mẫu in</b>.')}`}
+ ]},
+ {id:'thu-ngan', name:'Thu ngân', desc:'Thu tiền, in phiếu, yêu cầu xuất hóa đơn', articles:[
+  {id:'phat-sinh', title:'Danh sách phát sinh dịch vụ', sub:'Tìm lượt cần thu tiền', body:`
+   ${PATH('Thu ngân')}
+   <p class="lead">Màn hình liệt kê các lượt khám có dịch vụ phát sinh trong ngày, kèm tổng đã thu và còn phải thu.</p>
+   ${IMG('phatsinh','Thu ngân › Phát sinh dịch vụ')}
+   <table class="t"><thead><tr><th>Số</th><th>Phần</th><th>Dùng để</th></tr></thead><tbody>
+    <tr><td>${N(1)}</td><td>Bộ lọc</td><td>Ngày (hoặc tháng, năm), tên/SĐT/mã bệnh nhân, bác sĩ thực hiện, loại dịch vụ, trạng thái thanh toán, hóa đơn, khoa/phòng. Bấm <span class="btnlike">Tìm kiếm</span>.</td></tr>
+    <tr><td>${N(2)}</td><td>Tổng hợp</td><td>Số lượt, Tổng phát sinh, Đã thu, Còn phải thu theo bộ lọc đang chọn.</td></tr>
+    <tr><td>${N(3)}</td><td><span class="btnlike">Xem phiếu</span></td><td>Xem lại phiếu của lượt khám.</td></tr>
+    <tr><td>${N(4)}</td><td><span class="btnlike green">Thanh toán</span></td><td>Mở màn thu tiền của lượt khám.</td></tr>
+    <tr><td>${N(5)}</td><td><span class="btnlike green">Xuất HĐĐT</span>, <span class="btnlike green">Liên thông</span></td><td>Xuất hóa đơn điện tử và gửi liên thông. Chỉ bấm khi chắc chắn, vì dữ liệu được gửi ra hệ thống bên ngoài.</td></tr>
+   </tbody></table>
+   ${INFO('Cột Mã đơn thuốc và Dịch vụ phát sinh giúp đối chiếu nhanh với bệnh nhân trước khi thu tiền.')}`},
+  {id:'thu-tien', title:'Thu tiền: tiền mặt hoặc chuyển khoản', sub:'Thu từng phần hoặc toàn bộ', body:`
+   ${PATH('Thu ngân','Thanh toán')}
+   <p class="lead">Thu tiền cho từng dịch vụ hoặc toàn bộ lượt khám. Tiền mặt tự tính tiền trả lại; chuyển khoản dùng mã QR.</p>
+   <ol class="steps">
+    <li><b class="h">Mở màn thanh toán</b><p>Từ <b>Thu ngân</b> bấm <span class="btnlike green">Thanh toán</span> ở dòng bệnh nhân, hoặc từ tab <b>Thanh toán</b> trong màn Khám bệnh.</p>${IMG('kham_thanhtoan','Tab Thanh toán trong màn Khám bệnh: mã phiếu, tạm tính, nút Thanh toán')}</li>
+    <li><b class="h">Thu tiền theo số trên ảnh</b>${IMG('thanhtoan','Màn Thanh toán')}
+     <table class="t"><thead><tr><th>Số</th><th>Phần</th><th>Ghi chú</th></tr></thead><tbody>
+      <tr><td>${N(1)}</td><td>Dịch vụ thanh toán</td><td>Tích các dịch vụ bệnh nhân trả lần này. Tiền thuốc không tính ở đây.</td></tr>
+      <tr><td>${N(2)}</td><td>Yêu cầu xuất hóa đơn</td><td>Chỉ điền khi bệnh nhân cần hóa đơn. Xem bài <a href="#/thu-ngan/hoa-don">Yêu cầu xuất hóa đơn</a>.</td></tr>
+      <tr><td>${N(3)}</td><td>Phương thức thanh toán</td><td>Tiền mặt (mặc định) hoặc Chuyển khoản.</td></tr>
+      <tr><td>${N(4)}</td><td>Thu lần này, Tiền khách đưa, Tiền trả lại</td><td>Tiền mặt: nhập Tiền khách đưa, phần mềm tự tính Tiền trả lại.</td></tr>
+      <tr><td>${N(5)}</td><td>Ghi chú</td><td>Không bắt buộc.</td></tr>
+      <tr><td>${N(6)}</td><td><span class="btnlike">Xác nhận thu tiền</span></td><td>Lưu lần thu, tạo phiếu TT….</td></tr>
+      <tr><td>${N(7)}</td><td><span class="btnlike">In phiếu thanh toán</span></td><td>In phiếu A5.</td></tr>
+      <tr><td>${N(8)}</td><td><span class="btnlike">Hiển thị QR</span></td><td>Đẩy mã QR ra <b>thiết bị hiển thị QR</b> đặt ở quầy cho bệnh nhân quét. Chưa có thiết bị thì báo "Chưa kết nối thiết bị QRCode".</td></tr>
+     </tbody></table></li>
+   </ol>
+   <div class="card"><h3>Chuyển khoản khi quầy không có thiết bị QR</h3>
+    <p>Chọn phương thức <b>Chuyển khoản</b>, bấm <span class="btnlike">In phiếu thanh toán</span>: phiếu in có khối <b>Quét mã để chuyển khoản</b> với số tiền và nội dung điền sẵn. Bệnh nhân quét mã trên phiếu bằng ứng dụng ngân hàng; thu ngân kiểm tra tiền đã về rồi bấm Xác nhận thu tiền.</p>
+    <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start">
+     <figure class="shot" style="max-width:360px;flex:1 1 300px;margin:0"><img src="img_phieu_tt_ck.jpg" alt="Phiếu thanh toán chuyển khoản (minh họa)" loading="lazy"><figcaption>Phiếu thanh toán chuyển khoản. Minh họa bằng dữ liệu mẫu, mã QR và số tài khoản là giả</figcaption></figure>
+     <figure class="shot" style="max-width:320px;flex:0 1 320px;margin:0"><img src="img_qr_loi.jpg" alt="Thông báo chưa kết nối thiết bị QR" loading="lazy"><figcaption>Thông báo khi bấm Hiển thị QR mà quầy chưa có thiết bị</figcaption></figure>
+    </div></div>
+   ${INFO('Bệnh nhân trả trước một phần: dịch vụ chưa tích vẫn còn ở Còn phải thu, lần sau mở lại màn thanh toán để thu tiếp.')}`},
+  {id:'in-phieu-tt', title:'In phiếu thanh toán', sub:'Phiếu A5, có QR khi chuyển khoản', body:`
+   ${PATH('Thu ngân','Thanh toán','Lịch sử thanh toán')}
+   <p class="lead">Phiếu thanh toán khổ A5 in các dịch vụ đã thu, hình thức thanh toán, số tiền bằng chữ. Khối QR chuyển khoản chỉ in khi chọn chuyển khoản.</p>
+   <ol class="steps">
+    <li><b class="h">Chưa thu hoặc vừa thu xong</b><p>Bấm <span class="btnlike">In phiếu thanh toán</span> ở góc trên màn Thanh toán.</p></li>
+    <li><b class="h">In lại phiếu của lần thu trước</b><p>Kéo xuống cuối màn Thanh toán, bấm dấu + ở mục <b>Lịch sử thanh toán</b> ${N(1)}. Mỗi lần thu là một dòng: ngày giờ thu, số tiền, tiền khách đưa, tiền trả lại và các dịch vụ đã thu. Bấm <span class="btnlike out">In phiếu thanh toán</span> ${N(2)} ở dòng cần in.</p>${IMG('lichsu_tt','Mục Lịch sử thanh toán ở cuối màn Thanh toán')}</li>
+    <li><b class="h">Chọn máy in, khổ A5 và in</b></li>
+   </ol>
+   ${WARN('Sau khi đã thu đủ, nút In phiếu thanh toán ở đầu trang báo "Không có dịch vụ để thanh toán". Hãy in từ Lịch sử thanh toán.')}
+   ${INFO('Logo hoặc mã QR đôi khi in ra ô trống khi mạng chậm. Đóng hộp thoại in và bấm in lại.')}`},
+  {id:'hoa-don', title:'Yêu cầu xuất hóa đơn điện tử', sub:'Cá nhân hoặc doanh nghiệp', body:`
+   ${PATH('Thu ngân','Thanh toán')}
+   <p class="lead">Khi bệnh nhân cần hóa đơn, điền thông tin người mua ở khung ${N(2)} của màn Thanh toán trước khi thu tiền.</p>
+   ${IMG('thanhtoan','Khung (2) Yêu cầu xuất hóa đơn trong màn Thanh toán')}
+   <ol class="steps">
+    <li><b class="h">Tích Yêu cầu xuất hóa đơn</b></li>
+    <li><b class="h">Điền thông tin người mua</b><ul><li><b>Loại khách hàng:</b> Cá nhân hoặc Doanh nghiệp</li><li>Tên người mua, Tên đơn vị</li><li><b>Mã số thuế</b>: bấm <span class="btnlike">Tra cứu</span> để tự điền tên, địa chỉ doanh nghiệp</li><li>Email nhận hóa đơn, Địa chỉ</li></ul></li>
+    <li><b class="h">Xác nhận thu tiền</b><p>Thông tin được dùng khi bấm Xuất hóa đơn sau thanh toán. Dòng <b>Hóa đơn</b> hiện <span style="color:#e8590c;font-weight:600">Chưa xuất</span> hoặc Đã xuất.</p></li>
+   </ol>
+   ${WARN('Không tích Yêu cầu xuất hóa đơn thì không cần điền khung này.')}`},
+ ]},
+ {id:'quan-tri', name:'Quản trị', desc:'Báo cáo, xuất Excel, liên thông', articles:[
+  {id:'bao-cao', title:'Báo cáo và xuất Excel', sub:'Sổ khám bệnh, doanh thu', body:`
+   ${PATH('Báo cáo')}
+   <p class="lead">Menu Báo cáo có 2 báo cáo: <b>Báo cáo sổ khám bệnh</b> và <b>Báo cáo chi tiết doanh thu dịch vụ</b>. Cả hai đều chọn bộ lọc, bấm Tìm kiếm rồi Xuất Excel.</p>
+   <div class="card"><h3>Sổ khám bệnh</h3>
+    ${IMG('sokhambenh','Báo cáo › Báo cáo sổ khám bệnh')}
+    <p>${N(1)} Lọc theo ngày (tháng, năm), tên hoặc mã bệnh nhân, bác sĩ, đối tượng, chẩn đoán (mã ICD-10). ${N(2)} <span class="btnlike out">Xuất Excel</span> để lưu hoặc in sổ.</p>
+    <p>Cột: STT, họ tên, tuổi Nam/Nữ, số thẻ BHYT, địa chỉ, nghề nghiệp, dân tộc, triệu chứng, chẩn đoán, phương pháp điều trị, bác sĩ khám.</p></div>
+   <div class="card"><h3>Chi tiết doanh thu dịch vụ</h3>
+    ${IMG('doanhthu','Báo cáo › Báo cáo chi tiết doanh thu dịch vụ')}
+    <p>${N(1)} Lọc theo ngày, bệnh nhân, bác sĩ thực hiện, khoa/phòng, loại dịch vụ, trạng thái thanh toán, trạng thái hóa đơn. ${N(2)} Ô tổng: số bệnh nhân, lượt dịch vụ, tổng doanh thu, đã thu, còn phải thu. ${N(3)} <span class="btnlike out">Xuất Excel</span>.</p>
+    <p>Mỗi lượt khám là một dòng đậm, bên dưới là từng dịch vụ với bác sĩ chỉ định, bác sĩ thực hiện, đơn giá, số lượng, thành tiền.</p></div>`},
+  {id:'lien-thong', title:'Liên thông', sub:'Đơn thuốc quốc gia, HĐĐT, TL GPP', body:`
+   <p class="lead">TL CLINIC kết nối với ba hệ thống bên ngoài. Bảng dưới cho biết cần chuẩn bị gì và khai báo ở đâu.</p>
+   <table class="t"><thead><tr><th>Liên thông</th><th>Cần chuẩn bị</th><th>Khai báo ở</th><th>Hoạt động khi</th></tr></thead><tbody>
+    <tr><td>Đơn thuốc quốc gia</td><td>Mã liên thông, tài khoản, mật khẩu của từng bác sĩ</td><td>Danh mục nhân sự › Tài khoản liên thông quốc gia</td><td>Bác sĩ kê đơn; trạng thái gửi theo dõi trong bệnh án</td></tr>
+    <tr><td>Hóa đơn điện tử</td><td>Key, tài khoản, mật khẩu do nhà cung cấp hóa đơn cấp</td><td>Danh mục › Thiết lập chung</td><td>Thu ngân tích Yêu cầu xuất hóa đơn rồi xuất sau thanh toán</td></tr>
+    <tr><td>Nhà thuốc TL GPP</td><td>Nhà thuốc đang dùng phần mềm TL GPP</td><td>Liên hệ bộ phận hỗ trợ để kết nối</td><td>Bác sĩ bấm Hoàn thành khám: đơn được đẩy sang nhà thuốc để bán. Tùy chọn dùng chung danh mục thuốc</td></tr>
+   </tbody></table>`}
+ ]},
+ {id:'hoi-dap', name:'Hỏi đáp', desc:'Câu hỏi thường gặp, xử lý sự cố', faq:true, articles:[]}
+];
+
+const FAQ = [
+ ['Bấm Hoàn thành khám báo "Triệu chứng/Chẩn đoán chưa được nhập"','<p>Hoàn thành khám bắt buộc có Triệu chứng (tab Thông tin chung) và ít nhất một chẩn đoán ICD-10 (tab Chẩn đoán). Bấm Thoát, nhập phần còn thiếu, bấm Lưu rồi hoàn thành lại. Xem bài <a href="#/bac-si/hoan-thanh">Hoàn thành khám</a>.</p>'],
+ ['Bấm Hiển thị QR báo "Chưa kết nối thiết bị QRCode"','<p>Nút Hiển thị QR đẩy mã ra thiết bị hiển thị QR ở quầy. Không có thiết bị: chọn Chuyển khoản và in phiếu thanh toán, bệnh nhân quét mã QR in trên phiếu. Xem bài <a href="#/thu-ngan/thu-tien">Thu tiền</a>.</p>'],
+ ['In phiếu bị mất logo hoặc mã QR','<p>Thường xảy ra khi mạng chậm: lệnh in chạy trước khi ảnh kịp tải. Đóng hộp thoại in và bấm in lại, lần thứ hai ảnh đã có sẵn. Đội kỹ thuật đang sửa để phần mềm tự chờ ảnh trước khi in.</p>'],
+ ['Phiếu in ra 2 trang dù trang 1 còn trống','<p>Thường do mẫu in đã bị sửa và lưu qua ô soạn thảo ở Danh mục mẫu in. Liên hệ hỗ trợ để làm sạch mẫu; không tự sửa mẫu trong ô soạn thảo.</p>'],
+ ['Phiếu kết quả CLS in sai mẫu','<p>Phiếu kết quả CLS lấy mẫu in theo từng dịch vụ, không theo mẫu mặc định. Vào <b>Danh mục › Danh mục dịch vụ</b>, sửa dịch vụ, chọn đúng mẫu ở ô <b>Mẫu in</b>.</p>'],
+ ['Gõ mã ICD không ra gợi ý','<p>Lần đầu mở màn Khám bệnh, danh mục ICD cần vài giây để tải. Chờ một chút rồi gõ lại; nếu vẫn không được, tải lại trang (F5).</p>'],
+ ['Nhà thuốc chưa nhận được đơn thuốc','<p>Đơn chỉ được đẩy sang phần mềm nhà thuốc TL GPP khi bác sĩ bấm <b>Hoàn thành khám</b> và xác nhận đủ 2 lần. Kiểm tra lượt khám đã ở trạng thái Hoàn thành chưa.</p>'],
+ ['Đã thu đủ nhưng không in được phiếu thanh toán','<p>In từ mục <b>Lịch sử thanh toán</b> ở cuối màn Thanh toán, không dùng nút in ở đầu trang. Xem bài <a href="#/thu-ngan/in-phieu-tt">In phiếu thanh toán</a>.</p>'],
+ ['Kết quả cận lâm sàng có xuống dòng nhưng phiếu in liền một đoạn','<p>Các mẫu in mới đã giữ xuống dòng cho khám lâm sàng, bệnh sử, lời dặn, xử trí. Nếu vẫn bị liền, mẫu đang dùng là mẫu cũ: chọn mẫu "(mẫu mới 17/11)" làm mặc định.</p>'],
+ ['Cần trình duyệt và máy in gì','<p>Máy tính có trình duyệt (khuyến nghị Chrome), kết nối Internet, máy in khổ A4 và A5. Không cần cài đặt phần mềm.</p>']
+];
+
+/* ===== Hiển thị ===== */
+const $ = s => document.querySelector(s);
+const nav = $('#nav'), side = $('#side'), view = $('#view');
+nav.innerHTML = `<a href="#/" data-s="">Trang chủ</a>` + SECTIONS.map(s => `<a href="#/${s.id}" data-s="${s.id}">${s.name}</a>`).join('');
+
+function sideFor(sec, artId){
+  if(!sec){
+    side.innerHTML = `<h2>Các phần hướng dẫn</h2>` + SECTIONS.map((s,i)=>`<a class="item" href="#/${s.id}"><span class="num">${i+1}</span><span><span class="t">${s.name}</span><span class="d">${s.desc}</span></span></a>`).join('');
+    return;
+  }
+  const n = sec.articles.length;
+  let h = `<h2>${sec.name}${n?` <span class="cnt">${n}</span>`:''}</h2>`;
+  if(n) h += sec.articles.map((a,i)=>`<a class="item${a.id===artId?' on':''}" href="#/${sec.id}/${a.id}"><span class="num">${i+1}</span><span><span class="t">${a.title}</span><span class="d">${a.sub}</span></span></a>`).join('');
+  else if(sec.faq) h += FAQ.map((f,i)=>`<a class="item" href="#/hoi-dap" onclick="openFaq(${i})"><span class="num">${i+1}</span><span><span class="t">${f[0]}</span></span></a>`).join('');
+  else h += `<p class="d" style="padding:4px 8px;color:#6b7280;font-size:12.5px">Các bài của phần này đang được biên soạn.</p>`;
+  h += `<div class="grp">Phần khác</div>` + SECTIONS.filter(s=>s!==sec).map(s=>`<a class="item" href="#/${s.id}"><span class="num">${ic(s.id,'#6b7280',14)}</span><span><span class="t" style="font-weight:500">${s.name}</span></span></a>`).join('');
+  side.innerHTML = h;
+}
+
+function home(){
+  const flow = [['Lịch hẹn','Lễ tân','le-tan/lich-hen'],['Tiếp đón','Lễ tân, sinh hiệu','le-tan/dang-ky-kham'],['Khám bệnh','Bác sĩ','bac-si/mo-luot-kham'],['Cận lâm sàng','Kỹ thuật viên','cls/nhap-ket-qua'],['Kê đơn','Bác sĩ','bac-si/ke-don'],['Thu ngân','Thu ngân','thu-ngan/thu-tien'],['Bệnh án','Tự tổng hợp','bac-si/benh-an']];
+  const arrow = `<span class="arr"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></span>`;
+  view.innerHTML = `
+  <section class="hero">
+    <div style="flex:1">
+      <h1>Hướng dẫn sử dụng TL CLINIC</h1>
+      <p>Chọn vai trò của bạn để xem đúng các bước công việc hằng ngày: đặt lịch, khám, kê đơn, nhập kết quả, thu tiền và quản trị danh mục.</p>
+      <div class="cta"><a class="btn" href="#/thiet-lap/tong-quan">${ic('bat-dau','#fff',16)}Phòng khám mới: thiết lập ban đầu</a><a class="btn out" href="#/bat-dau/mot-luot-kham">Một lượt khám từ A đến Z</a></div>
+    </div>
+    <svg class="art" width="170" height="120" viewBox="0 0 170 120" aria-hidden="true"><rect x="8" y="10" width="154" height="100" rx="8" fill="#fff" stroke="#dbe3f0"/><rect x="8" y="10" width="154" height="16" rx="8" fill="#eef3fb"/><rect x="8" y="22" width="154" height="4" fill="#eef3fb"/><rect x="16" y="34" width="40" height="68" rx="4" fill="#f3f6fb"/><rect x="21" y="40" width="30" height="5" rx="2" fill="#2f63ed"/><rect x="21" y="50" width="26" height="4" rx="2" fill="#c9d4ea"/><rect x="21" y="58" width="22" height="4" rx="2" fill="#c9d4ea"/><rect x="21" y="66" width="18" height="5" rx="2" fill="#f6c344"/><rect x="64" y="34" width="90" height="10" rx="3" fill="#e8f1fb"/><rect x="64" y="50" width="90" height="6" rx="3" fill="#eef1f5"/><rect x="64" y="61" width="70" height="6" rx="3" fill="#eef1f5"/><rect x="64" y="72" width="80" height="6" rx="3" fill="#eef1f5"/><rect x="114" y="88" width="40" height="12" rx="3" fill="#2f63ed"/></svg>
+  </section>
+  <div class="sec-t">Chọn vai trò của bạn</div>
+  <div class="roles">${SECTIONS.filter(s=>!['bat-dau','thiet-lap','hoi-dap'].includes(s.id)).map(s=>`<a class="role" href="#/${s.id}"><span class="ic">${ic(s.id)}</span><b>${s.name}</b><span>${s.desc}</span></a>`).join('')}</div>
+  <div class="sec-t">Một lượt khám đi qua 7 bước</div>
+  <div class="flow">${flow.map((f,i)=>(i?arrow:'')+`<a href="#/${f[2]}"><span class="n">${i+1}</span><b>${f[0]}</b><span>${f[1]}</span></a>`).join('')}</div>
+  <div class="sec-t">Hay được tìm</div>
+  <div class="quick">
+    <a href="#/bac-si/ke-don"><b>Kê đơn thuốc</b><span>Chọn thuốc, số lượng, cách dùng, đơn mẫu</span></a>
+    <a href="#/bac-si/hoan-thanh"><b>Hoàn thành khám</b><span>Xác nhận 2 lần, đơn đẩy sang nhà thuốc</span></a>
+    <a href="#/thu-ngan/thu-tien"><b>Thu tiền</b><span>Tiền mặt, chuyển khoản QR, thu từng phần</span></a>
+    <a href="#/thu-ngan/in-phieu-tt"><b>In phiếu thanh toán</b><span>In từ Lịch sử thanh toán</span></a>
+    <a href="#/hoi-dap"><b>In bị mất logo, QR</b><span>Cách xử lý nhanh</span></a>
+    <a href="https://mauketqua.tlgo.vn" target="_blank" rel="noopener"><b>Thư viện mẫu kết quả</b><span>Mẫu siêu âm, xét nghiệm để dán vào dịch vụ</span></a>
+  </div>
+  ${foot()}`;
+}
+
+function foot(){return `<div class="foot"><span>Công ty TNHH Công nghệ và TM Ánh Sáng · <a href="https://tlgo.vn" target="_blank" rel="noopener">TLGo.vn</a></span><span>Hướng dẫn cho phần mềm TL CLINIC</span></div>`;}
+
+function sectionPage(sec){
+  if(sec.faq){
+    view.innerHTML = `<div class="crumb"><a href="#/">Trang chủ</a> › Hỏi đáp</div><h1>Câu hỏi thường gặp</h1><p class="lead">Các tình huống hay gặp khi dùng phần mềm và cách xử lý.</p>` +
+      FAQ.map((f,i)=>`<details class="faq" id="faq${i}"><summary>${f[0]}</summary><div class="a">${f[1]}</div></details>`).join('') + foot();
+    return;
+  }
+  if(!sec.articles.length){
+    view.innerHTML = `<div class="crumb"><a href="#/">Trang chủ</a> › ${sec.name}</div><h1>${sec.name}</h1><p class="lead">${sec.desc}.</p>
+      <div class="soon"><b style="color:#14213d">Đang biên soạn.</b> Các bài sẽ có trong phần này:<ul style="margin:8px 0 0;padding-left:18px">${sec.soon.map(x=>`<li>${x}</li>`).join('')}</ul></div>` + foot();
+    return;
+  }
+  view.innerHTML = `<div class="crumb"><a href="#/">Trang chủ</a> › ${sec.name}</div><h1>${sec.name}</h1><p class="lead">${sec.desc}. Chọn bài bên dưới hoặc ở cột bên trái.</p>
+    <ol class="steps">${sec.articles.map(a=>`<li><a href="#/${sec.id}/${a.id}"><b class="h" style="color:#1e3a6e">${a.title}</b></a><p style="color:#6b7280">${a.sub}</p></li>`).join('')}</ol>` + foot();
+}
+
+function articlePage(sec, a){
+  const i = sec.articles.indexOf(a), prev = sec.articles[i-1], next = sec.articles[i+1];
+  view.innerHTML = `<div class="crumb"><a href="#/">Trang chủ</a> › <a href="#/${sec.id}">${sec.name}</a></div><h1>${a.title}</h1>${a.body}
+   <div class="pager">${prev?`<a href="#/${sec.id}/${prev.id}"><small>‹ Bài trước</small><b>${prev.title}</b></a>`:'<span style="flex:1"></span>'}${next?`<a class="nx" href="#/${sec.id}/${next.id}"><small>Bài tiếp ›</small><b>${next.title}</b></a>`:'<span style="flex:1"></span>'}</div>${foot()}`;
+}
+
+window.openFaq = i => setTimeout(()=>{const d=document.getElementById('faq'+i); if(d){d.open=true; d.scrollIntoView({behavior:'smooth',block:'start'});}},60);
+
+function route(){
+  const [sid, aid] = (location.hash.replace(/^#\/?/,'')||'').split('/');
+  const sec = SECTIONS.find(s=>s.id===sid);
+  nav.querySelectorAll('a').forEach(x=>x.classList.toggle('on', x.dataset.s===(sec?sec.id:'')));
+  document.body.classList.remove('side-open');
+  if(!sec){ sideFor(null); home(); document.title='Hướng dẫn sử dụng TL CLINIC'; }
+  else{
+    const a = sec.articles.find(x=>x.id===aid);
+    sideFor(sec, a&&a.id);
+    if(a){ articlePage(sec,a); document.title=a.title+' · Hướng dẫn TL CLINIC'; }
+    else { sectionPage(sec); document.title=sec.name+' · Hướng dẫn TL CLINIC'; }
+  }
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange', route);
+$('#menuBtn').onclick = () => document.body.classList.toggle('side-open');
+
+/* ===== Tìm kiếm ===== */
+const norm = s => s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').toLowerCase();
+const strip = h => h.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ');
+const INDEX = [];
+SECTIONS.forEach(s=>{ s.articles.forEach(a=>INDEX.push({href:`#/${s.id}/${a.id}`, title:a.title, where:s.name, text:norm(a.title+' '+a.sub+' '+strip(a.body))})); });
+FAQ.forEach((f,i)=>INDEX.push({href:'#/hoi-dap', faq:i, title:f[0], where:'Hỏi đáp', text:norm(f[0]+' '+strip(f[1]))}));
+const q = $('#q'), res = $('#results'); let act = -1;
+function search(){
+  const words = norm(q.value.trim()).split(/\s+/).filter(Boolean);
+  if(!words.length){ res.classList.remove('show'); return; }
+  const hits = INDEX.map(x=>({x, s:words.reduce((n,w)=>n+(x.text.includes(w)?1:0)+(norm(x.title).includes(w)?2:0),0)})).filter(h=>words.every(w=>h.x.text.includes(w))).sort((a,b)=>b.s-a.s).slice(0,8);
+  act = -1;
+  res.innerHTML = hits.length ? hits.map(h=>`<a href="${h.x.href}" ${h.x.faq!=null?`onclick="openFaq(${h.x.faq})"`:''}><b>${h.x.title}</b><span>${h.x.where}</span></a>`).join('') : `<div class="none">Chưa có bài phù hợp. Thử từ khóa khác, ví dụ "kê đơn", "thu tiền".</div>`;
+  res.classList.add('show');
+}
+q.addEventListener('input', search);
+q.addEventListener('focus', search);
+q.addEventListener('keydown', e=>{
+  const items = [...res.querySelectorAll('a')];
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){ e.preventDefault(); if(!items.length) return; act = (act + (e.key==='ArrowDown'?1:-1) + items.length) % items.length; items.forEach((x,i)=>x.classList.toggle('act', i===act)); }
+  else if(e.key==='Enter'){ const t = items[act>=0?act:0]; if(t){ t.click(); q.blur(); res.classList.remove('show'); } }
+  else if(e.key==='Escape'){ res.classList.remove('show'); q.blur(); }
+});
+document.addEventListener('click', e=>{ if(!e.target.closest('.tsearch')) res.classList.remove('show'); else if(e.target.closest('.results a')){ res.classList.remove('show'); q.value=''; } });
+
+const lb = $('#lb');
+document.addEventListener('click', e=>{ const im = e.target.closest('.shot img'); if(im){ lb.querySelector('img').src = im.src; lb.classList.add('show'); } else if(e.target.closest('#lb')) lb.classList.remove('show'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') lb.classList.remove('show'); });
+route();
+</script>
+</body>
+</html>
